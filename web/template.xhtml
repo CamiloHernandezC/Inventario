@@ -1,0 +1,319 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            </f:facet>
+            <script src="assets/js/custom.js"></script>
+        </h:head>
+
+        <!--***************Código para evitar que pueda ir hacia atras***********-->
+        <meta http-equiv="Expires" content="0" /> 
+        <meta http-equiv="Pragma" content="no-cache" />
+        <script type="text/javascript">
+            if (history.forward(1)) {
+                location.replace(history.forward(1));
+            }
+        </script>
+        <!--*********************************************************************-->
+
+        <h:body id="body">
+            <!--Test for unique actived session************************************-->
+            <c:if test="#{loginControl.validSession()}"/>
+            <!--*********************************************************************-->
+            <p:layout style="background: white" fullPage="true">
+                <p:layoutUnit collapsible="true" position="west" size="375" header="Movimientos Remisión">
+                    <div id="menuwe" >
+                        <h:form>
+                            <p:dataTable var="personas" value="#{movPersonasController.ultimosMovimientos}" >
+                                <p:column style="font-size:12px" headerText="Nombre">
+                                    <h:outputText  value="#{personas.personasSucursal.personas.nombre1}"/>
+                                </p:column>
+
+                                <p:column style="font-size:12px" headerText="Apellido">
+                                    <h:outputText value="#{personas.personasSucursal.personas.apellido1}"/>
+                                </p:column>
+
+                                <p:column style="font-size:11px" headerText="Fecha Entrada">
+                                    <h:outputText value="#{personas.fechaEntrada}">
+                                        <f:convertDateTime pattern="MM/dd/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column style="font-size:12px" headerText="Hora Entrada">
+                                    <h:outputText value="#{personas.horaEntrada}">
+                                        <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT-5"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column style="font-size:12px" headerText="Hora Salida">
+                                    <h:outputText value="#{personas.horaSalida}">
+                                        <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT-5"/>
+                                    </h:outputText>
+                                </p:column>
+
+                            </p:dataTable>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Ver todos" action="#{generalViewControl.irVerTodosMovimientos()}" />
+                                <p:commandLink immediate="true" style="margin-top: 100px" action="#{helpUtils.showModalHelpVerMovimientos()}">
+                                    <p:graphicImage style="width: 60%" url="#{resource['/images/Help.png']}"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                                
+                            
+                        </h:form>
+                    </div>
+                </p:layoutUnit>
+
+                <p:layoutUnit style="background: white;overflow-x: hidden" position="center">
+                    <p:layout style="background: white">
+
+                        <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                            <h:form style="float:right !important;margin:0px 0px 3px 0px;">
+                                <p:commandButton icon="ui-icon-key" id="loginButton" value="#{bundle.Logout}" action="#{loginControl.logout()}" immediate=""/>
+                            </h:form>
+
+                            <h:form style="float:left !important;margin:0px 0px 3px 0px;">
+                                <p:commandButton icon="ui-icon-home" id="loginButton" value="Inicio" action="#{generalViewControl.irIndex()}" immediate=""/>
+                            </h:form>
+                        </p:layoutUnit>
+
+                        <p:layoutUnit style="background: white;" position="center">
+                            <h:panelGrid columns="1" style="width: 40%">
+                                
+                                <h:form>
+                                    <p:stack   expanded="false" icon="#{resource['/images/up.png']}">
+                                        <p:menuitem id="id1" style="background-color: white" value="Configuracion" icon="#{resource['images/Config.png']}" url="#{generalViewControl.irConfiguracion()}"/>
+                                        <p:menuitem value="Novedades" icon="#{resource['images/Novedades_1.png']}" url="#"/>
+                                        <p:menuitem id="id3" value="Contactenos" update=":formContact" icon="#{resource['images/Email_1.png']}" action="#{generalViewControl.irContactanos()}"/>
+                                    </p:stack>
+                                </h:form>
+                            </h:panelGrid>
+
+                            <p:confirmDialog id="blockedDialog" appendTo="@(body)" message="BLOQUEADO" header="BLOQUEADO" severity="error" showEffect="fade" hideEffect="fade" widgetVar="blockedDialog" closable="false">
+                                <h:form>
+                                    <p:commandButton value="#{bundle.Accept}" onclick="PF('blockedDialog').hide();" ajax="false"/>
+                                </h:form>
+                            </p:confirmDialog>
+                            <p:confirmDialog id="expressDialog" appendTo="@(body)" message="#{bundle.DontExistPersonMessage}" header="Atención" severity="error" showEffect="fade" hideEffect="fade" widgetVar="expressDialog" closable="false">
+                                <h:form>
+                                    <p:commandButton value="#{bundle.Accept}" onclick="PF('expressDialog').hide();" ajax="false"/>
+
+                                    <p:commandButton value="Ir a Registrar Persona" action="#{expressController.redirecToPersonFormEntry()}" ajax="false"/>
+                                </h:form>
+                            </p:confirmDialog>
+
+                            <p:confirmDialog id="sucursalDialog" appendTo="@(body)" message="Seleccione los siguientes datos para la entrada" header="Sucursal" severity="error" showEffect="fade" hideEffect="fade" widgetVar="sucursalDialog" closable="false">
+                                <h:form id="sucursalForm">
+                                    <h:panelGrid columns="1" cellpadding="5px">
+                                        <h:panelGrid columns="4" cellpadding="5">
+                                            <p:outputLabel for="sucursales" value="#{bundle.CreatePersonasCliLabel_idSucursal}" rendered="#{configFormController.mostrarSucursal}"/>
+                                            <p:selectOneMenu id="sucursales" value="#{personasSucursalController.selected.sucursales}" rendered="#{configFormController.mostrarSucursal}" required="#{configFormController.mostrarSucursal}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_idSucursal}" autoWidth="false" style=" width: 170px">
+                                                <f:selectItem itemLabel="Seleccionar"  noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems  value="#{sucursalesController.items}" var="sucursales" itemLabel="#{sucursales.nombre}" itemValue="#{sucursales}"/>
+                                            </p:selectOneMenu>
+                                            <p:outputLabel for="areaEmpresa" value="#{bundle.CreatePersonasCliLabel_area}" rendered="true"/>
+                                            <p:selectOneMenu id="areaEmpresa" value="#{personasSucursalController.selected.area}" rendered="true" required="true" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_area}" filter="true" filterMatchMode="contains"  autoWidth="false" style=" width: 170px">
+                                                <f:selectItem itemLabel="Seleccionar"  noSelectionOption="true" itemValue="#{null}"/>
+                                                <f:selectItems value="#{areasEmpresaController.items}" var="areas" itemLabel="#{areas.descripcion}" itemValue="#{areas}"/>
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel for="vigenciaEPS" value="#{bundle.CreatePersonasCliLabel_fechavigenciaEPS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}"/>
+                                            <p:calendar id="vigenciaEPS" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}" required="#{configFormController.mostrarFecha_vigencia_EPS}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fechaEPS}" style=" width: 200px" yearRange="c-100:c+0" navigator="true"  mindate="#{generalViewControl.actualDate}"/>
+                                            <p:outputLabel for="vigenciaARL" value="#{bundle.CreatePersonasCliLabel_fechavigenciaARL}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}"/>
+                                            <p:calendar id="vigenciaARL" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}" required="#{configFormController.mostrarFecha_vigencia_ARL}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fecha_arl}" yearRange="c-100:c+0" navigator="true"  style="width: 200px"  mindate="#{generalViewControl.actualDate}"/>
+
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" cellpadding="5px">
+                                            <p:commandButton value="Aceptar" action="#{manualController.save(true)}" ajax="true"/>
+                                            <p:commandButton value="#{bundle.Cancel}" update="sucursalForm" onclick="PF('sucursalDialog').hide();" ajax="false" immediate="true"/>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+
+
+                                </h:form>
+                            </p:confirmDialog>
+
+
+                            <p:confirmDialog id="fechasDialog" appendTo="@(body)" message="Seleccione los siguientes datos para la entrada" header="Sucursal" severity="error" showEffect="fade" hideEffect="fade" widgetVar="fechasDialog" closable="false">
+                                <h:form id="fechasForm">
+                                    <h:panelGrid columns="4" cellpadding="5">
+
+                                        <p:outputLabel for="vigenciaEPS" value="#{bundle.CreatePersonasCliLabel_fechavigenciaEPS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}"/>
+                                        <p:calendar id="vigenciaEPS" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}" required="#{configFormController.mostrarFecha_vigencia_EPS}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fechaEPS}" style=" width: 200px" yearRange="c-100:c+0" navigator="true"  mindate="#{generalViewControl.actualDate}"/>
+                                        <p:outputLabel for="vigenciaARL" value="#{bundle.CreatePersonasCliLabel_fechavigenciaARL}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}"/>
+                                        <p:calendar id="vigenciaARL" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}" required="#{configFormController.mostrarFecha_vigencia_ARL}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fecha_arl}" yearRange="c-100:c+0" navigator="true"  style="width: 200px"  mindate="#{generalViewControl.actualDate}"/>
+
+                                    </h:panelGrid>
+                                    <p:commandButton value="Aceptar" action="#{manualController.save(true)}" ajax="true"/>
+                                </h:form>
+                            </p:confirmDialog>
+
+                            <p:dialog header="Dialogo de Ayuda" appendTo="@(body)" widgetVar="dlgHelpTheme" modal="true" closable="true" minHeight="40">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p> Elija el tema que desea tener al inicar sesión. </p>
+                                        <p> Los botones que encuentra son los siguientes: </p>
+                                        <ul>
+                                            <li>Ver : Sirve para definir el tema</li>
+                                            <li>Reset : Vuelve a los valores por defecto (Excite-Bike)"</li>
+                                        </ul>
+                                    </h:panelGrid>
+                                    <p:graphicImage url="..\resources\images\Info.png"/>
+                                </h:panelGrid>
+
+                            </p:dialog>
+
+
+                            <p:dialog header="Dialogo de Ayuda" appendTo="@(body)" widgetVar="dlgHelpTheme" modal="true" closable="true" minHeight="40">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p> Elija el tema que desea tener al inicar sesión. </p>
+                                        <p> Los botones que encuentra son los siguientes: </p>
+                                        <ul>
+                                            <li>Ver : Sirve para definir el tema</li>
+                                            <li>Reset : Vuelve a los valores por defecto (Excite-Bike)"</li>
+                                        </ul>
+                                    </h:panelGrid>
+                                    <p:graphicImage url="..\resources\images\Info.png"/>
+                                </h:panelGrid>
+                            </p:dialog>
+
+                            <p:dialog header="Dialogo de Ayuda" appendTo="@(body)" widgetVar="dlgHelpContact" modal="true" closable="true" minHeight="40">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p>  </p>
+                                        <p> Ingrese todos los datos </p>
+                                        <ul>
+                                            <li>Ingrese su nombre.</li>
+                                            <li>Ingrese el correo donde desea ser contactado</li>
+                                            <li>Ingrese la descripción del problema o la situación que desea comentar, añada la información necesaria</li>
+                                            <li>Pulse aceptar para enviar un correo a nuestro servicio técnico.</li>
+                                        </ul>
+                                    </h:panelGrid>
+                                    <p:graphicImage url="#{resource['/images/Info.png']}"/>
+                                </h:panelGrid>
+                            </p:dialog>
+                            
+                            <p:dialog header="Dialogo de Ayuda" appendTo="@(body)" widgetVar="dlgHelpMov" modal="true" closable="true" minHeight="40">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p>  </p>
+                                        <p> Permite ver todos los movimientos de remisiones realizados con cualquier fecha de entrada</p>
+                                        <p> <b>POR DEFECTO: </b>Siempre se tomará en la primera consulta la fecha de <b>HOY</b></p>
+                                    </h:panelGrid>
+                                    <p:graphicImage url="#{resource['/images/Info.png']}"/>
+                                </h:panelGrid>
+                            </p:dialog>
+                            
+
+                            <p:dialog header="Contacto servicio tecnico" closable="true" appendTo="@(body)" widgetVar="diagContact" modal="true" minHeight="40">
+                                <h:form id="formContact">
+                                    <p:messages id="messages" showDetail="false"  autoUpdate="true" closable="true"/>
+                                    <h:panelGrid columns="1" cellpadding="5px">
+                                        <h:panelGrid columns="2">
+                                            <p:outputLabel value="Nombre (COMPLETO): "/>
+                                            <p:inputText requiredMessage="Nombre" required="true" value="#{helpUtils.nombre}"/>
+                                            
+                                            <p:outputLabel value="Ciudad: "/>
+                                            <p:inputText requiredMessage="Ingrese la Ciudad" required="true" value="#{helpUtils.ciudad}"/>
+
+                                            <p:outputLabel value="Correo de Contacto y/o Telefono: "/>
+                                            <p:inputText requiredMessage="Ingrese medio de contacto" required="true" value="#{helpUtils.correoContacto}"/>
+                                        </h:panelGrid>
+                                        <p:outputLabel value="Descripcion de la Solicitud o problema"/>
+                                        <p:inputTextarea requiredMessage="Ingrese la descripcion" required="true" rows="10" cols="57"  style="overflow-y: scroll;max-height:100px;min-height:100px; resize: none" value="#{helpUtils.descripcion}"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <p:commandButton update="messages" value="Aceptar" ajax="true" action="#{helpUtils.enviarCorreoContacto()}"/>
+                                        <p:commandLink immediate="true" style="margin-top: 100px" action="#{helpUtils.showModalHelpContact()}">
+                                            <p:graphicImage style="width: 60%" url="#{resource['/images/Help.png']}"/>
+                                        </p:commandLink>
+                                    </h:panelGrid>
+                                </h:form>    
+                            </p:dialog>
+
+                            <p:dialog header="Movimientos Completos" closable="true" appendTo="@(body)" widgetVar="diagMovCompletos" modal="true" minHeight="40">
+                                <h:form>
+                                    <p:dataTable paginator="true" rows="10" var="personas" value="#{movPersonasController.movimientosDiarios}" >
+                                        <p:column filterBy="#{personas.personasSucursal.personas.nombre1}" style="font-size:11px" headerText="1ER Nombre">
+                                            <h:outputText  value="#{personas.personasSucursal.personas.nombre1}"/>
+                                        </p:column>
+
+                                        <p:column filterBy="#{personas.personasSucursal.personas.nombre2}" style="font-size:11px" headerText="2DO Nombre">
+                                            <h:outputText  value="#{personas.personasSucursal.personas.nombre2}"/>
+                                        </p:column>
+
+                                        <p:column filterBy="#{personas.personasSucursal.personas.apellido1}" style="font-size:11px" headerText="1ER Apellido">
+                                            <h:outputText value="#{personas.personasSucursal.personas.apellido1}"/>
+                                        </p:column>
+
+                                        <p:column filterBy="#{personas.personasSucursal.personas.apellido2}" style="font-size:11px" headerText="2DO Apellido">
+                                            <h:outputText value="#{personas.personasSucursal.personas.apellido2}"/>
+                                        </p:column>
+
+                                        <p:column filterBy="#{personas.personasSucursal.personas.tipoDocumento.descripcion}" style="font-size:11px" headerText="Tipo Doc">
+                                            <h:outputText value="#{personas.personasSucursal.personas.tipoDocumento.descripcion}"/>
+                                        </p:column>
+
+                                        <p:column filterBy="#{personas.personasSucursal.personas.numeroDocumento}" style="font-size:11px" headerText="Documento">
+                                            <h:outputText value="#{personas.personasSucursal.personas.numeroDocumento}"/>
+                                        </p:column>
+                                        
+                                        <p:column filterBy="#{personas.personasSucursal.entidad.descripcion}" style="font-size:11px" headerText="Entidad">
+                                            <h:outputText value="#{personas.personasSucursal.entidad.descripcion}"/>
+                                        </p:column>
+
+                                        <p:column style="font-size:11px" headerText="Fecha Entrada">
+                                            <h:outputText value="#{personas.fechaEntrada}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column style="font-size:11px" headerText="Hora Entrada">
+                                            <h:outputText value="#{personas.horaEntrada}">
+                                                <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT-5"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column style="font-size:11px" headerText="Fecha Salida">
+                                            <h:outputText value="#{personas.fechaSalida}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column style="font-size:11px" headerText="Hora Salida">
+                                            <h:outputText value="#{personas.horaSalida}">
+                                                <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT-5"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column filterBy="#{personas.personasSucursal.area.descripcion}" style="font-size:11px" headerText="Area Visitada">
+                                            <h:outputText value="#{personas.personasSucursal.area.descripcion}"/>
+                                        </p:column>
+
+                                        <p:column filterBy="#{personas.personasSucursal.personas.empresaOrigen.nombre1}" style="font-size:11px" headerText="Empresa">
+                                            <h:outputText value="#{personas.personasSucursal.personas.empresaOrigen.nombre1}"/>
+                                        </p:column>
+
+                                        <p:column style="font-size:11px" headerText="Celular">
+                                            <h:outputText value="#{personas.personasSucursal.personas.celular}"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+                            </p:dialog>
+                            <p:growl id="growl" sticky="false" autoUpdate="true" life="4000"/>
+                            <ui:insert name="content"/>
+                        </p:layoutUnit>
+                    </p:layout>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </f:view>
+</html>
