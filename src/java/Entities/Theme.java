@@ -23,20 +23,17 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author a.morales
+ * @author Kmilo
  */
 @Entity
 @Table(name = "theme")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Theme.findAll", query = "SELECT t FROM Theme t")
-    , @NamedQuery(name = "Theme.findById", query = "SELECT t FROM Theme t WHERE t.id = :id")
-    , @NamedQuery(name = "Theme.findByDisplayName", query = "SELECT t FROM Theme t WHERE t.displayName = :displayName")
-    , @NamedQuery(name = "Theme.findByName", query = "SELECT t FROM Theme t WHERE t.name = :name")})
+    @NamedQuery(name = "Theme.findAll", query = "SELECT t FROM Theme t"),
+    @NamedQuery(name = "Theme.findById", query = "SELECT t FROM Theme t WHERE t.id = :id"),
+    @NamedQuery(name = "Theme.findByDisplayName", query = "SELECT t FROM Theme t WHERE t.displayName = :displayName"),
+    @NamedQuery(name = "Theme.findByName", query = "SELECT t FROM Theme t WHERE t.name = :name")})
 public class Theme implements Serializable {
-
-    @OneToMany(mappedBy = "tema", fetch = FetchType.LAZY)
-    private List<Usuarios> usuariosList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,6 +51,8 @@ public class Theme implements Serializable {
     @Size(min = 1, max = 32)
     @Column(name = "Name")
     private String name;
+    @OneToMany(mappedBy = "tema", fetch = FetchType.LAZY)
+    private List<Usuarios> usuariosList;
 
     public Theme() {
     }
@@ -92,6 +91,15 @@ public class Theme implements Serializable {
         this.name = name;
     }
 
+    @XmlTransient
+    public List<Usuarios> getUsuariosList() {
+        return usuariosList;
+    }
+
+    public void setUsuariosList(List<Usuarios> usuariosList) {
+        this.usuariosList = usuariosList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -116,15 +124,5 @@ public class Theme implements Serializable {
     public String toString() {
         return name;
     }
-
-    @XmlTransient
-    public List<Usuarios> getUsuariosList() {
-        return usuariosList;
-    }
-
-    public void setUsuariosList(List<Usuarios> usuariosList) {
-        this.usuariosList = usuariosList;
-    }
     
 }
-
