@@ -65,10 +65,6 @@ public class Materiales implements Serializable {
     @JoinColumn(name = "Unidad", referencedColumnName = "Id_Unidad")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Unidades unidad;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiales", fetch = FetchType.LAZY)
-    private List<Inventario> inventarioList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaterial", fetch = FetchType.LAZY)
-    private List<MovMateriales> movMaterialesList;
 
     public Materiales() {
     }
@@ -130,24 +126,6 @@ public class Materiales implements Serializable {
 
     public void setUnidad(Unidades unidad) {
         this.unidad = unidad;
-    }
-
-    @XmlTransient
-    public List<Inventario> getInventarioList() {
-        return inventarioList;
-    }
-
-    public void setInventarioList(List<Inventario> inventarioList) {
-        this.inventarioList = inventarioList;
-    }
-
-    @XmlTransient
-    public List<MovMateriales> getMovMaterialesList() {
-        return movMaterialesList;
-    }
-
-    public void setMovMaterialesList(List<MovMateriales> movMaterialesList) {
-        this.movMaterialesList = movMaterialesList;
     }
 
     @Override

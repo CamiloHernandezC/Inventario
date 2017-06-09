@@ -5,17 +5,17 @@
  */
 package Facade;
 
-import Entities.MovMateriales;
+import Entities.Remisiones;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author a.morales
+ * @author Kmilo
  */
 @Stateless
-public class MovMaterialesFacade extends AbstractFacade<MovMateriales> {
+public class RemisionesFacade extends AbstractFacade<Remisiones> {
 
     @PersistenceContext(unitName = "PorteriaV3PU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class MovMaterialesFacade extends AbstractFacade<MovMateriales> {
         return em;
     }
 
-    public MovMaterialesFacade() {
-        super(MovMateriales.class);
+    public RemisionesFacade() {
+        super(Remisiones.class);
     }
     
 }

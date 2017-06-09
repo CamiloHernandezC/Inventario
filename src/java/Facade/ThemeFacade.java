@@ -5,8 +5,8 @@
  */
 package Facade;
 
-
-
+import Facade.AbstractFacade;
+import Entities.Paises;
 import Entities.Theme;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,10 +14,10 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author a.morales
+ * @author Kmilo
  */
 @Stateless
-public class TemasFacade extends AbstractFacade<Theme> {
+public class ThemeFacade extends AbstractFacade<Theme> {
 
     @PersistenceContext(unitName = "PorteriaV3PU")
     private EntityManager em;
@@ -27,7 +27,7 @@ public class TemasFacade extends AbstractFacade<Theme> {
         return em;
     }
 
-    public TemasFacade() {
+    public ThemeFacade() {
         super(Theme.class);
     }
     

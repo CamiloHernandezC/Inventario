@@ -3,7 +3,7 @@ package Themes;
 import Controllers.UsuariosController;
 import Controllers.util.JsfUtil;
 import Entities.Theme;
-import Facade.TemasFacade;
+import Facade.ThemeFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,7 +22,7 @@ import javax.inject.Named;
 public class TemasController implements Serializable {
 
     @EJB
-    private Facade.TemasFacade ejbFacade;
+    private Facade.ThemeFacade ejbFacade;
     private List<Theme> items = null;
     private Theme selected;
 
@@ -52,7 +52,7 @@ public class TemasController implements Serializable {
         this.selected = selected;
     }
 
-    private TemasFacade getFacade() {
+    private ThemeFacade getFacade() {
         return ejbFacade;
     }
 

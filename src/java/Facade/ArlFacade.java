@@ -5,6 +5,7 @@
  */
 package Facade;
 
+import Facade.AbstractFacade;
 import Entities.Arl;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,7 +13,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author a.morales
+ * @author Kmilo
  */
 @Stateless
 public class ArlFacade extends AbstractFacade<Arl> {

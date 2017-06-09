@@ -8,10 +8,11 @@ package Entities;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -28,47 +29,47 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Inventario.findAll", query = "SELECT i FROM Inventario i"),
-    @NamedQuery(name = "Inventario.findByMaterial", query = "SELECT i FROM Inventario i WHERE i.inventarioPK.material = :material"),
-    @NamedQuery(name = "Inventario.findBySucursal", query = "SELECT i FROM Inventario i WHERE i.inventarioPK.sucursal = :sucursal"),
+    @NamedQuery(name = "Inventario.findByIdInventario", query = "SELECT i FROM Inventario i WHERE i.idInventario = :idInventario"),
     @NamedQuery(name = "Inventario.findByCantidad", query = "SELECT i FROM Inventario i WHERE i.cantidad = :cantidad")})
 public class Inventario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected InventarioPK inventarioPK;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Id_Inventario")
+    private Integer idInventario;
     @Basic(optional = false)
     @NotNull
     @Column(name = "Cantidad")
     private int cantidad;
-    @JoinColumn(name = "Material", referencedColumnName = "Id_Material", insertable = false, updatable = false)
+    @JoinColumns({
+        @JoinColumn(name = "Material", referencedColumnName = "Id_Material"),
+        @JoinColumn(name = "Sucursal", referencedColumnName = "Id_Sucursal")})
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Materiales materiales;
-    @JoinColumn(name = "Sucursal", referencedColumnName = "Id_Sucursal", insertable = false, updatable = false)
+    private MaterialesSucursal materialesSucursal;
+    @JoinColumn(name = "Almacen", referencedColumnName = "Id_Almacen")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Sucursales sucursales;
+    private Almacen almacen;
 
     public Inventario() {
     }
 
-    public Inventario(InventarioPK inventarioPK) {
-        this.inventarioPK = inventarioPK;
+    public Inventario(Integer idInventario) {
+        this.idInventario = idInventario;
     }
 
-    public Inventario(InventarioPK inventarioPK, int cantidad) {
-        this.inventarioPK = inventarioPK;
+    public Inventario(Integer idInventario, int cantidad) {
+        this.idInventario = idInventario;
         this.cantidad = cantidad;
     }
 
-    public Inventario(int material, int sucursal) {
-        this.inventarioPK = new InventarioPK(material, sucursal);
+    public Integer getIdInventario() {
+        return idInventario;
     }
 
-    public InventarioPK getInventarioPK() {
-        return inventarioPK;
-    }
-
-    public void setInventarioPK(InventarioPK inventarioPK) {
-        this.inventarioPK = inventarioPK;
+    public void setIdInventario(Integer idInventario) {
+        this.idInventario = idInventario;
     }
 
     public int getCantidad() {
@@ -79,26 +80,26 @@ public class Inventario implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Materiales getMateriales() {
-        return materiales;
+    public MaterialesSucursal getMaterialesSucursal() {
+        return materialesSucursal;
     }
 
-    public void setMateriales(Materiales materiales) {
-        this.materiales = materiales;
+    public void setMaterialesSucursal(MaterialesSucursal materialesSucursal) {
+        this.materialesSucursal = materialesSucursal;
     }
 
-    public Sucursales getSucursales() {
-        return sucursales;
+    public Almacen getAlmacen() {
+        return almacen;
     }
 
-    public void setSucursales(Sucursales sucursales) {
-        this.sucursales = sucursales;
+    public void setAlmacen(Almacen almacen) {
+        this.almacen = almacen;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (inventarioPK != null ? inventarioPK.hashCode() : 0);
+        hash += (idInventario != null ? idInventario.hashCode() : 0);
         return hash;
     }
 
@@ -109,7 +110,7 @@ public class Inventario implements Serializable {
             return false;
         }
         Inventario other = (Inventario) object;
-        if ((this.inventarioPK == null && other.inventarioPK != null) || (this.inventarioPK != null && !this.inventarioPK.equals(other.inventarioPK))) {
+        if ((this.idInventario == null && other.idInventario != null) || (this.idInventario != null && !this.idInventario.equals(other.idInventario))) {
             return false;
         }
         return true;
@@ -117,7 +118,7 @@ public class Inventario implements Serializable {
 
     @Override
     public String toString() {
-        return "Entities.Inventario[ inventarioPK=" + inventarioPK + " ]";
+        return "Entities.Inventario[ idInventario=" + idInventario + " ]";
     }
     
 }

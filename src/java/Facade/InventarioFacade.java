@@ -5,7 +5,7 @@
  */
 package Facade;
 
-import Entities.Departamentos;
+import Entities.Inventario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Kmilo
  */
 @Stateless
-public class DepartamentosFacade extends AbstractFacade<Departamentos> {
+public class InventarioFacade extends AbstractFacade<Inventario> {
 
     @PersistenceContext(unitName = "PorteriaV3PU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class DepartamentosFacade extends AbstractFacade<Departamentos> {
         return em;
     }
 
-    public DepartamentosFacade() {
-        super(Departamentos.class);
+    public InventarioFacade() {
+        super(Inventario.class);
     }
     
 }
