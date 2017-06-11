@@ -18,6 +18,7 @@ public class Querys {
     public static final String PERSONAS_SUCURSAL_CLI_NO_ESTADO= " a.estado.idEstado != '";
         public static String PERSONAS_SUCURSAL_ID_EXTERNO=" a.idExterno = '";
     //</editor-fold>
+        
     //<editor-fold desc="PERSONAS CLI QUERY" defaultstate="collapsed">
     public static final String PERSONA_CLI_ALL= "SELECT a FROM Personas a ";
     public static final String PERSONA_CLI_DOC_TYPE= " a.tipoDocumento.tipoDocumento = '";
@@ -28,6 +29,7 @@ public class Querys {
     public static final String PERSONA_CLI_PRIMARY_KEY= "SELECT a FROM Personas a ORDER BY a.idPersona DESC";
     public static final String PERSONA_CLI_IN_SUCURSAL= " a.idSucursal IN ";
     //</editor-fold>
+    
     //<editor-fold desc="MOV PERSONAS CLI QUERY" defaultstate="collapsed">
     public static final String MOV_PERSONA_CLI_ALL= "SELECT a FROM MovPersonas a ";
     public static final String MOV_PERSONA_CLI_PERSONA= " a.personasSucursal.personas.idPersona = '";
@@ -36,14 +38,16 @@ public class Querys {
     public static final String MOV_PERSONA_CLI_PRIMARY_KEY= "SELECT a FROM MovPersonas a ORDER BY a.idMovPersona DESC";
     public static String MOV_PERSONA_CLI_ORDER_BY_ID = " ORDER BY a.idMovPersona DESC";
     //</editor-fold>
+    
     //<editor-fold desc="MUNICIPIOS CLI QUERY" defaultstate="collapsed">
     public static final String MUNICIPIOS_CLI_DEPARTAMENTO= "SELECT a FROM MunicipiosCli a where a.idDepartamento.idDepartamento = '";
     //</editor-fold>
+    
     //<editor-fold desc="PORTERIA SUCURSAL CLI QUERY" defaultstate="collapsed">
     public static String PORTERIA_SUCURSAL_CLI_PORTERIA= "SELECT a FROM PorteriasSucursal a WHERE a.porteriasSucursalPK.porteria = '";
     //</editor-fold>
 
-     //<editor-fold desc="USUARIOS QUERY" defaultstate="collapsed">
+    //<editor-fold desc="USUARIOS QUERY" defaultstate="collapsed">
     public static final String USUARIOS_ALL = "SELECT a FROM Usuarios a";
     public static final String USUARIOS_ID=" a.idUsuario = '";
     public static final String USUARIOS_PASSWORD=" a.password = '";
@@ -51,6 +55,11 @@ public class Querys {
     public static final String USUARIOS_ID_SESION= " a.iDSesion = '";
     public static final String USUARIOS_FECHA_DESDE= " a.fechaDesde <= '";
     public static final String USUARIOS_FECHA_HASTA= " a.fechaHasta >= '";
+    //</editor-fold>
+    
+    //<editor-fold desc="USUARIOS QUERY" defaultstate="collapsed">
+    public static final String MATERIALES_ALL = "SELECT a FROM Materiales a";
+    public static final String MATERIALES_ID_MATERIAL = "a.idMaterial ='";
     //</editor-fold>
     
 }

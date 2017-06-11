@@ -1,85 +1,81 @@
 package Controllers;
 
-import Entities.MaterialesSucursal;
+import Entities.Cardex;
 import Controllers.util.JsfUtil;
 import Controllers.util.JsfUtil.PersistAction;
-import Facade.MaterialesSucursalFacade;
+import Facade.CardexFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("materialesSucursalController")
-@SessionScoped
-public class MaterialesSucursalController implements Serializable {
+//@Named("cardexController")
+//@SessionScoped
+public class CardexController implements Serializable {
 
     @EJB
-    private Facade.MaterialesSucursalFacade ejbFacade;
-    private List<MaterialesSucursal> items = null;
-    private MaterialesSucursal selected;
+    protected Facade.CardexFacade ejbFacade;
+    protected List<Cardex> items = null;
+    protected Cardex selected;
 
-    public MaterialesSucursalController() {
+    public CardexController() {
     }
 
-    public MaterialesSucursal getSelected() {
+    public Cardex getSelected() {
         return selected;
     }
 
-    public void setSelected(MaterialesSucursal selected) {
+    public void setSelected(Cardex selected) {
         this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {
-        selected.getMaterialesSucursalPK().setIdMaterial(selected.getMateriales().getIdMaterial());
-        selected.getMaterialesSucursalPK().setIdSucursal(selected.getSucursales().getIdSucursal());
     }
 
     protected void initializeEmbeddableKey() {
-        selected.setMaterialesSucursalPK(new Entities.MaterialesSucursalPK());
     }
 
-    private MaterialesSucursalFacade getFacade() {
+    private CardexFacade getFacade() {
         return ejbFacade;
     }
 
-    public MaterialesSucursal prepareCreate() {
-        selected = new MaterialesSucursal();
+    public Cardex prepareCreate() {
+        selected = new Cardex();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CardexCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CardexUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CardexDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<MaterialesSucursal> getItems() {
+    public List<Cardex> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            items = new ArrayList();
         }
         return items;
     }
@@ -112,48 +108,40 @@ public class MaterialesSucursalController implements Serializable {
         }
     }
 
-    public MaterialesSucursal getMaterialesSucursal(Entities.MaterialesSucursalPK id) {
+    public Cardex getCardex(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<MaterialesSucursal> getItemsAvailableSelectMany() {
+    public List<Cardex> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<MaterialesSucursal> getItemsAvailableSelectOne() {
+    public List<Cardex> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = MaterialesSucursal.class)
-    public static class MaterialesSucursalControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
+    @FacesConverter(forClass = Cardex.class)
+    public static class CardexControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            MaterialesSucursalController controller = (MaterialesSucursalController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "materialesSucursalController");
-            return controller.getMaterialesSucursal(getKey(value));
+            CardexController controller = (CardexController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "cardexController");
+            return controller.getCardex(getKey(value));
         }
 
-        Entities.MaterialesSucursalPK getKey(String value) {
-            Entities.MaterialesSucursalPK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new Entities.MaterialesSucursalPK();
-            key.setIdMaterial(Integer.parseInt(values[0]));
-            key.setIdSucursal(Integer.parseInt(values[1]));
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(Entities.MaterialesSucursalPK value) {
+        String getStringKey(java.lang.Integer value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdMaterial());
-            sb.append(SEPARATOR);
-            sb.append(value.getIdSucursal());
+            sb.append(value);
             return sb.toString();
         }
 
@@ -162,11 +150,11 @@ public class MaterialesSucursalController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof MaterialesSucursal) {
-                MaterialesSucursal o = (MaterialesSucursal) object;
-                return getStringKey(o.getMaterialesSucursalPK());
+            if (object instanceof Cardex) {
+                Cardex o = (Cardex) object;
+                return getStringKey(o.getIdMovimientoMaterial());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), MaterialesSucursal.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Cardex.class.getName()});
                 return null;
             }
         }

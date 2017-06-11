@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TrasladosMaterialCreateDlg" widgetVar="TrasladosMaterialCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateTrasladosMaterialTitle}">
+            <h:form id="TrasladosMaterialCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{trasladosMaterialController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateTrasladosMaterialLabel_fechaIngreso}" for="fechaIngreso" />
+                        <p:calendar id="fechaIngreso" pattern="MM/dd/yyyy HH:mm:ss" value="#{trasladosMaterialController.selected.fechaIngreso}" title="#{bundle.EditTrasladosMaterialTitle_fechaIngreso}" required="true" requiredMessage="#{bundle.EditTrasladosMaterialRequiredMessage_fechaIngreso}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateTrasladosMaterialLabel_fechaSalida}" for="fechaSalida" />
+                        <p:calendar id="fechaSalida" pattern="MM/dd/yyyy HH:mm:ss" value="#{trasladosMaterialController.selected.fechaSalida}" title="#{bundle.EditTrasladosMaterialTitle_fechaSalida}" required="true" requiredMessage="#{bundle.EditTrasladosMaterialRequiredMessage_fechaSalida}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateTrasladosMaterialLabel_remisiones}" for="remisiones" />
+                        <p:selectOneMenu id="remisiones" value="#{trasladosMaterialController.selected.remisiones}" required="true" requiredMessage="#{bundle.EditTrasladosMaterialRequiredMessage_remisiones}">
+                            <f:selectItems value="#{remisionesController.itemsAvailableSelectOne}"
+                                           var="remisionesItem"
+                                           itemValue="#{remisionesItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateTrasladosMaterialLabel_remisiones1}" for="remisiones1" />
+                        <p:selectOneMenu id="remisiones1" value="#{trasladosMaterialController.selected.remisiones1}" required="true" requiredMessage="#{bundle.EditTrasladosMaterialRequiredMessage_remisiones1}">
+                            <f:selectItems value="#{remisionesController.itemsAvailableSelectOne}"
+                                           var="remisiones1Item"
+                                           itemValue="#{remisiones1Item}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateTrasladosMaterialLabel_sucursalEntrada}" for="sucursalEntrada" />
+                        <p:selectOneMenu id="sucursalEntrada" value="#{trasladosMaterialController.selected.sucursalEntrada}" required="true" requiredMessage="#{bundle.EditTrasladosMaterialRequiredMessage_sucursalEntrada}">
+                            <f:selectItems value="#{sucursalesController.itemsAvailableSelectOne}"
+                                           var="sucursalEntradaItem"
+                                           itemValue="#{sucursalEntradaItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateTrasladosMaterialLabel_sucursalSalida}" for="sucursalSalida" />
+                        <p:selectOneMenu id="sucursalSalida" value="#{trasladosMaterialController.selected.sucursalSalida}" required="true" requiredMessage="#{bundle.EditTrasladosMaterialRequiredMessage_sucursalSalida}">
+                            <f:selectItems value="#{sucursalesController.itemsAvailableSelectOne}"
+                                           var="sucursalSalidaItem"
+                                           itemValue="#{sucursalSalidaItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{trasladosMaterialController.create}" value="#{bundle.Save}" update="display,:TrasladosMaterialListForm:datalist,:growl" oncomplete="handleSubmit(args,'TrasladosMaterialCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="TrasladosMaterialCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

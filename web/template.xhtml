@@ -65,8 +65,8 @@
                                     <p:graphicImage style="width: 60%" url="#{resource['/images/Help.png']}"/>
                                 </p:commandLink>
                             </h:panelGrid>
-                                
-                            
+
+
                         </h:form>
                     </div>
                 </p:layoutUnit>
@@ -86,7 +86,7 @@
 
                         <p:layoutUnit style="background: white;" position="center">
                             <h:panelGrid columns="1" style="width: 40%">
-                                
+
                                 <h:form>
                                     <p:stack   expanded="false" icon="#{resource['/images/up.png']}">
                                         <p:menuitem id="id1" style="background-color: white" value="Configuracion" icon="#{resource['images/Config.png']}" url="#{generalViewControl.irConfiguracion()}"/>
@@ -200,7 +200,7 @@
                                     <p:graphicImage url="#{resource['/images/Info.png']}"/>
                                 </h:panelGrid>
                             </p:dialog>
-                            
+
                             <p:dialog header="Dialogo de Ayuda" appendTo="@(body)" widgetVar="dlgHelpMov" modal="true" closable="true" minHeight="40">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <h:panelGrid columns="1" cellpadding="10">
@@ -211,7 +211,7 @@
                                     <p:graphicImage url="#{resource['/images/Info.png']}"/>
                                 </h:panelGrid>
                             </p:dialog>
-                            
+
 
                             <p:dialog header="Contacto servicio tecnico" closable="true" appendTo="@(body)" widgetVar="diagContact" modal="true" minHeight="40">
                                 <h:form id="formContact">
@@ -220,7 +220,7 @@
                                         <h:panelGrid columns="2">
                                             <p:outputLabel value="Nombre (COMPLETO): "/>
                                             <p:inputText requiredMessage="Nombre" required="true" value="#{helpUtils.nombre}"/>
-                                            
+
                                             <p:outputLabel value="Ciudad: "/>
                                             <p:inputText requiredMessage="Ingrese la Ciudad" required="true" value="#{helpUtils.ciudad}"/>
 
@@ -265,7 +265,7 @@
                                         <p:column filterBy="#{personas.personasSucursal.personas.numeroDocumento}" style="font-size:11px" headerText="Documento">
                                             <h:outputText value="#{personas.personasSucursal.personas.numeroDocumento}"/>
                                         </p:column>
-                                        
+
                                         <p:column filterBy="#{personas.personasSucursal.entidad.descripcion}" style="font-size:11px" headerText="Entidad">
                                             <h:outputText value="#{personas.personasSucursal.entidad.descripcion}"/>
                                         </p:column>
@@ -308,6 +308,18 @@
                                     </p:dataTable>
                                 </h:form>
                             </p:dialog>
+
+
+                            <p:confirmDialog  message="¿Está seguro que desea cancelar? Perderá todo el progreso" header="Confirmación" appendTo="@(body)" widgetVar="dialogoCancelarEntradaMateriales">
+                                <h:form>
+                                    <h:panelGrid columns="2">
+                                        <p:commandButton value="Aceptar" action="#{cardexController.cancelar()}" onclick="PF('dialogoCancelarEntradaMateriales').hide();" process="@all" ajax="false"/>
+                                        <p:commandButton value="Cancelar" onclick="PF('dialogoCancelarEntradaMateriales').hide();"/>
+                                    </h:panelGrid>
+                                </h:form>
+                            </p:confirmDialog>
+
+
                             <p:growl id="growl" sticky="false" autoUpdate="true" life="4000"/>
                             <ui:insert name="content"/>
                         </p:layoutUnit>

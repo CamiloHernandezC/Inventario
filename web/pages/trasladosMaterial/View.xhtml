@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TrasladosMaterialViewDlg" widgetVar="TrasladosMaterialViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewTrasladosMaterialTitle}">
+            <h:form id="TrasladosMaterialViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{trasladosMaterialController.selected != null}">
+                        <h:outputText value="#{bundle.ViewTrasladosMaterialLabel_fechaIngreso}"/>
+                        <h:outputText value="#{trasladosMaterialController.selected.fechaIngreso}" title="#{bundle.ViewTrasladosMaterialTitle_fechaIngreso}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewTrasladosMaterialLabel_fechaSalida}"/>
+                        <h:outputText value="#{trasladosMaterialController.selected.fechaSalida}" title="#{bundle.ViewTrasladosMaterialTitle_fechaSalida}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewTrasladosMaterialLabel_remisiones}"/>
+                        <h:outputText value="#{trasladosMaterialController.selected.remisiones}" title="#{bundle.ViewTrasladosMaterialTitle_remisiones}"/>
+                        <h:outputText value="#{bundle.ViewTrasladosMaterialLabel_remisiones1}"/>
+                        <h:outputText value="#{trasladosMaterialController.selected.remisiones1}" title="#{bundle.ViewTrasladosMaterialTitle_remisiones1}"/>
+                        <h:outputText value="#{bundle.ViewTrasladosMaterialLabel_sucursalEntrada}"/>
+                        <h:outputText value="#{trasladosMaterialController.selected.sucursalEntrada}" title="#{bundle.ViewTrasladosMaterialTitle_sucursalEntrada}"/>
+                        <h:outputText value="#{bundle.ViewTrasladosMaterialLabel_sucursalSalida}"/>
+                        <h:outputText value="#{trasladosMaterialController.selected.sucursalSalida}" title="#{bundle.ViewTrasladosMaterialTitle_sucursalSalida}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="TrasladosMaterialViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

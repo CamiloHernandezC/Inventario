@@ -1,9 +1,9 @@
 package Controllers;
 
-import Entities.MaterialesSucursal;
+import Entities.Remisiones;
 import Controllers.util.JsfUtil;
 import Controllers.util.JsfUtil.PersistAction;
-import Facade.MaterialesSucursalFacade;
+import Facade.RemisionesFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,65 +19,62 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("materialesSucursalController")
+@Named("remisionesController")
 @SessionScoped
-public class MaterialesSucursalController implements Serializable {
+public class RemisionesController implements Serializable {
 
     @EJB
-    private Facade.MaterialesSucursalFacade ejbFacade;
-    private List<MaterialesSucursal> items = null;
-    private MaterialesSucursal selected;
+    private Facade.RemisionesFacade ejbFacade;
+    private List<Remisiones> items = null;
+    private Remisiones selected;
 
-    public MaterialesSucursalController() {
+    public RemisionesController() {
     }
 
-    public MaterialesSucursal getSelected() {
+    public Remisiones getSelected() {
         return selected;
     }
 
-    public void setSelected(MaterialesSucursal selected) {
+    public void setSelected(Remisiones selected) {
         this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {
-        selected.getMaterialesSucursalPK().setIdMaterial(selected.getMateriales().getIdMaterial());
-        selected.getMaterialesSucursalPK().setIdSucursal(selected.getSucursales().getIdSucursal());
     }
 
     protected void initializeEmbeddableKey() {
-        selected.setMaterialesSucursalPK(new Entities.MaterialesSucursalPK());
     }
 
-    private MaterialesSucursalFacade getFacade() {
+    private RemisionesFacade getFacade() {
         return ejbFacade;
     }
 
-    public MaterialesSucursal prepareCreate() {
-        selected = new MaterialesSucursal();
+    public Remisiones prepareCreate() {
+        selected = new Remisiones();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RemisionesCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RemisionesUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RemisionesDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<MaterialesSucursal> getItems() {
+    public List<Remisiones> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -112,48 +109,40 @@ public class MaterialesSucursalController implements Serializable {
         }
     }
 
-    public MaterialesSucursal getMaterialesSucursal(Entities.MaterialesSucursalPK id) {
+    public Remisiones getRemisiones(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<MaterialesSucursal> getItemsAvailableSelectMany() {
+    public List<Remisiones> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<MaterialesSucursal> getItemsAvailableSelectOne() {
+    public List<Remisiones> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = MaterialesSucursal.class)
-    public static class MaterialesSucursalControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
+    @FacesConverter(forClass = Remisiones.class)
+    public static class RemisionesControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            MaterialesSucursalController controller = (MaterialesSucursalController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "materialesSucursalController");
-            return controller.getMaterialesSucursal(getKey(value));
+            RemisionesController controller = (RemisionesController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "remisionesController");
+            return controller.getRemisiones(getKey(value));
         }
 
-        Entities.MaterialesSucursalPK getKey(String value) {
-            Entities.MaterialesSucursalPK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new Entities.MaterialesSucursalPK();
-            key.setIdMaterial(Integer.parseInt(values[0]));
-            key.setIdSucursal(Integer.parseInt(values[1]));
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(Entities.MaterialesSucursalPK value) {
+        String getStringKey(java.lang.Integer value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdMaterial());
-            sb.append(SEPARATOR);
-            sb.append(value.getIdSucursal());
+            sb.append(value);
             return sb.toString();
         }
 
@@ -162,11 +151,11 @@ public class MaterialesSucursalController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof MaterialesSucursal) {
-                MaterialesSucursal o = (MaterialesSucursal) object;
-                return getStringKey(o.getMaterialesSucursalPK());
+            if (object instanceof Remisiones) {
+                Remisiones o = (Remisiones) object;
+                return getStringKey(o.getIdRemision());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), MaterialesSucursal.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Remisiones.class.getName()});
                 return null;
             }
         }

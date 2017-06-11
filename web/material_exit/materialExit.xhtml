@@ -15,31 +15,31 @@
                     <p:inputText autocomplete="false" value="" disabled="true" required="true"/>
                     
                     <h:outputLabel for="express" value="Codigo de Barras*" />
-                    <p:inputText autocomplete="false" value="" id="express" required="true">
-                        <p:ajax event="blur" process="formularioSalidaMateriales"/>
+                    <p:inputText  autocomplete="false" value="#{materialesController.selected.idMaterial}" id="express">
+                        <p:ajax event="keyup" listener="#{cardexController.agregarTablaMaterial()}" update="formularioSalidaMateriales :formularioSalidaMateriales:express"/>
                     </p:inputText>
                 
                 </h:panelGrid>
 
-                <p:dataTable paginator="true" rows="10" var="personas" value="#{movPersonasController.movimientosDiarios}" >
-                    <p:column filterBy="#{personas.personasSucursal.personas.nombre1}" style="font-size:11px" headerText="Material">
-                        <h:outputText  value="#{personas.personasSucursal.personas.nombre1}"/>
+                <p:dataTable paginator="true" rows="10" var="cardex" value="#{cardexController.items}" >
+                    <p:column filterBy="#{cardex.materialesSucursal.materiales.descripcion}" style="font-size:11px" headerText="Material">
+                        <h:outputText  value="#{cardex.materialesSucursal.materiales.descripcion}"/>
                     </p:column>
 
-                    <p:column filterBy="#{personas.personasSucursal.personas.nombre2}" style="font-size:11px" headerText="Cantidad">
-                        <h:outputText  value="#{personas.personasSucursal.personas.nombre2}"/>
+                    <p:column filterBy="#{cardex.cantida}" style="font-size:11px" headerText="Cantidad">
+                        <h:outputText  value="#{cardex.cantida}"/>
                     </p:column>
 
-                    <p:column filterBy="#{personas.personasSucursal.personas.apellido1}" style="font-size:11px" headerText="Codigo">
-                        <h:outputText value="#{personas.personasSucursal.personas.apellido1}"/>
+                    <p:column filterBy="#{cardex.materialesSucursal.materiales.idMaterial}" style="font-size:11px" headerText="Codigo">
+                        <h:outputText value="#{cardex.materialesSucursal.materiales.idMaterial}"/>
                     </p:column>
                 </p:dataTable>
 
                 <h:panelGrid columns="3">
 
-                    <p:commandButton value="Guardar"/>
+                    <p:commandButton value="Guardar" immediate="true" actionListener="#{cardexController.guardarCardex()}"/>
                     <p:commandButton value="Pausar"/>
-                    <p:commandButton value="Cancelar" action="#{generalViewControl.irIndex()}" immediate="true"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dialogoCancelarEntradaMateriales').show();" immediate="true"/>
 
                 </h:panelGrid>
             </h:panelGrid>

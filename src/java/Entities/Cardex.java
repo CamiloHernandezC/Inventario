@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Cardex.findByCantida", query = "SELECT c FROM Cardex c WHERE c.cantida = :cantida"),
     @NamedQuery(name = "Cardex.findByObservacion", query = "SELECT c FROM Cardex c WHERE c.observacion = :observacion"),
     @NamedQuery(name = "Cardex.findByCantidadActual", query = "SELECT c FROM Cardex c WHERE c.cantidadActual = :cantidadActual")})
-public class Cardex implements Serializable {
+public class Cardex extends AbstractEntity{
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -66,7 +66,7 @@ public class Cardex implements Serializable {
         @JoinColumn(name = "Id_Material", referencedColumnName = "Id_Material"),
         @JoinColumn(name = "Sucursal", referencedColumnName = "Id_Sucursal")})
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private MaterialesSucursal materialesSucursal;
+    private MaterialesSucursal materialesSucursal = new MaterialesSucursal();
     @JoinColumn(name = "Remision", referencedColumnName = "Id_Remision")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Remisiones remision;
@@ -175,6 +175,26 @@ public class Cardex implements Serializable {
     @Override
     public String toString() {
         return "Entities.Cardex[ idMovimientoMaterial=" + idMovimientoMaterial + " ]";
+    }
+
+    @Override
+    public int getPrimaryKey() {
+        return idMovimientoMaterial;
+    }
+
+    @Override
+    public void setPrimaryKey(int primaryKey) {
+        idMovimientoMaterial = primaryKey;
+    }
+
+    @Override
+    public void setUser(Personas user) {
+        //usuario = user;
+    }
+
+    @Override
+    public void setDate(Date date) {
+        fechaMovimiento = date;
     }
 
 }

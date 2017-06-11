@@ -6,6 +6,7 @@
 package ViewControllers;
 
 import Controllers.util.JsfUtil;
+import MaterialController.CardexController;
 import Utils.HelpUtils;
 import Utils.Navigation;
 import java.io.Serializable;
@@ -74,6 +75,8 @@ public class GeneralViewControl implements Serializable{
     }
     
     public String irIngresoMaterial(){
+        CardexController cardexController = JsfUtil.findBean("cardexController");
+        cardexController.limpiar();
         return Navigation.PAGE_MATERIAL_ENTRY;
     }
     

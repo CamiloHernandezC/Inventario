@@ -1,9 +1,9 @@
 package Controllers;
 
-import Entities.MaterialesSucursal;
+import Entities.TrasladosMaterial;
 import Controllers.util.JsfUtil;
 import Controllers.util.JsfUtil.PersistAction;
-import Facade.MaterialesSucursalFacade;
+import Facade.TrasladosMaterialFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,65 +19,65 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("materialesSucursalController")
+@Named("trasladosMaterialController")
 @SessionScoped
-public class MaterialesSucursalController implements Serializable {
+public class TrasladosMaterialController implements Serializable {
 
     @EJB
-    private Facade.MaterialesSucursalFacade ejbFacade;
-    private List<MaterialesSucursal> items = null;
-    private MaterialesSucursal selected;
+    private Facade.TrasladosMaterialFacade ejbFacade;
+    private List<TrasladosMaterial> items = null;
+    private TrasladosMaterial selected;
 
-    public MaterialesSucursalController() {
+    public TrasladosMaterialController() {
     }
 
-    public MaterialesSucursal getSelected() {
+    public TrasladosMaterial getSelected() {
         return selected;
     }
 
-    public void setSelected(MaterialesSucursal selected) {
+    public void setSelected(TrasladosMaterial selected) {
         this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {
-        selected.getMaterialesSucursalPK().setIdMaterial(selected.getMateriales().getIdMaterial());
-        selected.getMaterialesSucursalPK().setIdSucursal(selected.getSucursales().getIdSucursal());
+        selected.getTrasladosMaterialPK().setRemisionSalida(selected.getRemisiones1().getIdRemision());
+        selected.getTrasladosMaterialPK().setRemisionEntrada(selected.getRemisiones().getIdRemision());
     }
 
     protected void initializeEmbeddableKey() {
-        selected.setMaterialesSucursalPK(new Entities.MaterialesSucursalPK());
+        selected.setTrasladosMaterialPK(new Entities.TrasladosMaterialPK());
     }
 
-    private MaterialesSucursalFacade getFacade() {
+    private TrasladosMaterialFacade getFacade() {
         return ejbFacade;
     }
 
-    public MaterialesSucursal prepareCreate() {
-        selected = new MaterialesSucursal();
+    public TrasladosMaterial prepareCreate() {
+        selected = new TrasladosMaterial();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("TrasladosMaterialCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("TrasladosMaterialUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MaterialesSucursalDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("TrasladosMaterialDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<MaterialesSucursal> getItems() {
+    public List<TrasladosMaterial> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -112,20 +112,20 @@ public class MaterialesSucursalController implements Serializable {
         }
     }
 
-    public MaterialesSucursal getMaterialesSucursal(Entities.MaterialesSucursalPK id) {
+    public TrasladosMaterial getTrasladosMaterial(Entities.TrasladosMaterialPK id) {
         return getFacade().find(id);
     }
 
-    public List<MaterialesSucursal> getItemsAvailableSelectMany() {
+    public List<TrasladosMaterial> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<MaterialesSucursal> getItemsAvailableSelectOne() {
+    public List<TrasladosMaterial> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = MaterialesSucursal.class)
-    public static class MaterialesSucursalControllerConverter implements Converter {
+    @FacesConverter(forClass = TrasladosMaterial.class)
+    public static class TrasladosMaterialControllerConverter implements Converter {
 
         private static final String SEPARATOR = "#";
         private static final String SEPARATOR_ESCAPED = "\\#";
@@ -135,25 +135,25 @@ public class MaterialesSucursalController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            MaterialesSucursalController controller = (MaterialesSucursalController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "materialesSucursalController");
-            return controller.getMaterialesSucursal(getKey(value));
+            TrasladosMaterialController controller = (TrasladosMaterialController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "trasladosMaterialController");
+            return controller.getTrasladosMaterial(getKey(value));
         }
 
-        Entities.MaterialesSucursalPK getKey(String value) {
-            Entities.MaterialesSucursalPK key;
+        Entities.TrasladosMaterialPK getKey(String value) {
+            Entities.TrasladosMaterialPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new Entities.MaterialesSucursalPK();
-            key.setIdMaterial(Integer.parseInt(values[0]));
-            key.setIdSucursal(Integer.parseInt(values[1]));
+            key = new Entities.TrasladosMaterialPK();
+            key.setRemisionEntrada(Integer.parseInt(values[0]));
+            key.setRemisionSalida(Integer.parseInt(values[1]));
             return key;
         }
 
-        String getStringKey(Entities.MaterialesSucursalPK value) {
+        String getStringKey(Entities.TrasladosMaterialPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdMaterial());
+            sb.append(value.getRemisionEntrada());
             sb.append(SEPARATOR);
-            sb.append(value.getIdSucursal());
+            sb.append(value.getRemisionSalida());
             return sb.toString();
         }
 
@@ -162,11 +162,11 @@ public class MaterialesSucursalController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof MaterialesSucursal) {
-                MaterialesSucursal o = (MaterialesSucursal) object;
-                return getStringKey(o.getMaterialesSucursalPK());
+            if (object instanceof TrasladosMaterial) {
+                TrasladosMaterial o = (TrasladosMaterial) object;
+                return getStringKey(o.getTrasladosMaterialPK());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), MaterialesSucursal.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), TrasladosMaterial.class.getName()});
                 return null;
             }
         }

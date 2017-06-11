@@ -12,26 +12,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("materialesController")
-@SessionScoped
+//@Named("materialesController")
+//@SessionScoped
 public class MaterialesController implements Serializable {
 
     @EJB
-    private Facade.MaterialesFacade ejbFacade;
-    private List<Materiales> items = null;
-    private Materiales selected;
+    protected Facade.MaterialesFacade ejbFacade;
+    protected List<Materiales> items = null;
+    protected Materiales selected;
 
     public MaterialesController() {
     }
 
     public Materiales getSelected() {
+        if(selected==null){
+            selected = new Materiales();
+        }
         return selected;
     }
 
