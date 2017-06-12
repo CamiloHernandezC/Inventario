@@ -20,12 +20,9 @@ public class MaterialesController extends Controllers.MaterialesController{
         String sQuery = Querys.MATERIALES_ALL+" Where "+Querys.MATERIALES_ID_MATERIAL+selected.getIdMaterial()+"'";
         selected = (Materiales) ejbFacade.findByQuery(sQuery, true).result;
         if(selected!=null){
-            System.out.println("Encontro Material"); 
             return selected;
             
         }
-        selected = null;
-        System.out.println("No encontro material");
         return selected;
     }
     

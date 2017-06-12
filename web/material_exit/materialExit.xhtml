@@ -26,12 +26,12 @@
                         <h:outputText  value="#{cardex.materialesSucursal.materiales.descripcion}"/>
                     </p:column>
 
-                    <p:column filterBy="#{cardex.cantida}" style="font-size:11px" headerText="Cantidad">
-                        <h:outputText  value="#{cardex.cantida}"/>
-                    </p:column>
-
                     <p:column filterBy="#{cardex.materialesSucursal.materiales.idMaterial}" style="font-size:11px" headerText="Codigo">
                         <h:outputText value="#{cardex.materialesSucursal.materiales.idMaterial}"/>
+                    </p:column>
+                    
+                    <p:column style="font-size:11px" headerText="Cantidad">
+                        <h:outputText  value="#{cardex.cantida}"/>
                     </p:column>
                 </p:dataTable>
 

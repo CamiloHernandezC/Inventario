@@ -1,18 +1,13 @@
 package Controllers;
 
 import Entities.Cardex;
-import Controllers.util.JsfUtil;
-import Controllers.util.JsfUtil.PersistAction;
 import Facade.CardexFacade;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,7 +15,7 @@ import javax.faces.convert.FacesConverter;
 
 //@Named("cardexController")
 //@SessionScoped
-public class CardexController implements Serializable {
+public class CardexController extends AbstractPersistenceController<Cardex>{
 
     @EJB
     protected Facade.CardexFacade ejbFacade;
@@ -30,47 +25,24 @@ public class CardexController implements Serializable {
     public CardexController() {
     }
 
+    @Override
     public Cardex getSelected() {
         return selected;
     }
 
+    @Override
     public void setSelected(Cardex selected) {
         this.selected = selected;
     }
 
-    protected void setEmbeddableKeys() {
-    }
-
-    protected void initializeEmbeddableKey() {
-    }
-
-    private CardexFacade getFacade() {
+    @Override
+    protected CardexFacade getFacade() {
         return ejbFacade;
     }
 
-    public Cardex prepareCreate() {
-        selected = new Cardex();
-        initializeEmbeddableKey();
-        return selected;
-    }
-
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CardexCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CardexUpdated"));
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CardexDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
+    @Override
+    public void prepareCreate() {
+        
     }
 
     public List<Cardex> getItems() {
@@ -80,44 +52,34 @@ public class CardexController implements Serializable {
         return items;
     }
 
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
-    }
-
     public Cardex getCardex(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<Cardex> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+    @Override
+    protected void setItems(List<Cardex> items) {
+        this.items = items;
     }
 
-    public List<Cardex> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+    @Override
+    protected void prepareUpdate() {
+        //Nothing to do here
+    }
+
+    @Override
+    protected void clean() {
+        selected = null;
+        items = null;
+    }
+
+    @Override
+    protected void setEmbeddableKeys() {
+        //Nothing to do here
+    }
+
+    @Override
+    protected void initializeEmbeddableKey() {
+        //Nothing to do here
     }
 
     @FacesConverter(forClass = Cardex.class)

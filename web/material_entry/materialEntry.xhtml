@@ -19,27 +19,27 @@
                     
                     <h:outputLabel for="express" value="Codigo de Barras*" />
                     <p:inputText  autocomplete="false" value="#{materialesController.selected.idMaterial}" id="express">
-                        <p:ajax event="keyup" listener="#{cardexController.agregarTablaMaterial()}" update="formularioIngresoMateriales :formularioIngresoMateriales:express"/>
+                        <p:ajax event="keyup" listener="#{cardexController.agregarTablaMaterial()}" update=":formularioIngresoMateriales:tablaCardex :formularioIngresoMateriales:express"/>
                     </p:inputText>
                     
                     <h:outputLabel value="Numero de Reminsion Llegada" />
-                    <p:inputText autocomplete="false"/>
+                    <p:inputText autocomplete="false" value="#{remisionesController.selected.idRemision}"/>
                     
                     
                 
                 </h:panelGrid>
 
-                <p:dataTable paginator="true" rows="10" var="cardex" value="#{cardexController.items}" >
+                <p:dataTable id="tablaCardex" paginator="true" rows="10" var="cardex" value="#{cardexController.items}" >
                     <p:column filterBy="#{cardex.materialesSucursal.materiales.descripcion}" style="font-size:11px" headerText="Material">
                         <h:outputText  value="#{cardex.materialesSucursal.materiales.descripcion}"/>
                     </p:column>
 
-                    <p:column filterBy="#{cardex.cantida}" style="font-size:11px" headerText="Cantidad">
-                        <h:outputText  value="#{cardex.cantida}"/>
-                    </p:column>
-
                     <p:column filterBy="#{cardex.materialesSucursal.materiales.idMaterial}" style="font-size:11px" headerText="Codigo">
                         <h:outputText value="#{cardex.materialesSucursal.materiales.idMaterial}"/>
+                    </p:column>
+                    
+                    <p:column style="font-size:11px" headerText="Cantidad">
+                        <h:outputText  value="#{cardex.cantida}"/>
                     </p:column>
                 </p:dataTable>
 
