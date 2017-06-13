@@ -237,4 +237,9 @@ public class PersonasSucursal extends AbstractEntity {
         fecha = date;
     }
 
+    @Override
+    public void setStatus(Integer STATUS_INACTIVE) {
+        estado = new Estados(STATUS_INACTIVE);
+    }
+
 }

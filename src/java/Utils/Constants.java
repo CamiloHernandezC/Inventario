@@ -5,6 +5,8 @@
  */
 package Utils;
 
+import Converters.util.JsfUtil;
+
 /**
  *
  * @author MAURICIO
@@ -45,36 +47,63 @@ public class Constants {
     //</editor-fold>
     
     // <editor-fold desc="ENTITIES" defaultstate="collapsed">
-    public static final int ENTITY_VISITANT = 5;
+    public static final String ENTITY_VISITANT = "1";
     //</editor-fold>
     
     // <editor-fold desc="STATUS" defaultstate="collapsed">
-    public static final int STATUS_ENTRY = 3;
-    public static final int STATUS_BLOCKED= 2;
+    public static final Integer STATUS_ENTRY = 3;
+    public static final Integer STATUS_BLOCKED= 2;
+    public static final Integer STATUS_INACTIVE= 4;
+    public static final Integer STATUS_ACTIVE=1;
     //</editor-fold>
     
     // <editor-fold desc="DOCUMENT_TYPE" defaultstate="collapsed">
-    public static final int DOCUMENT_TYPE_CEDULA = 13;
+    public static final String DOCUMENT_TYPE_CEDULA = "13";
     //</editor-fold>
     
     // <editor-fold desc="ORIGIN ENTERPRISE" defaultstate="collapsed">
-    public static final int ORIGIN_ENTERPRISE_OTHER = 1;
+    public static final String ORIGIN_ENTERPRISE_OTHER = "1";
+    //</editor-fold>
     //</editor-fold>
     
-    // <editor-fold desc="CATEGORIES" defaultstate="collapsed">
-    static int CATEGORY_PERSON =1;
-    //</editor-fold>
-    
-     // <editor-fold desc="HTTP SESSION" defaultstate="collapsed">
+    // <editor-fold desc="HTTP SESSION" defaultstate="collapsed">
     public static final String SESSION_USER="USER";
     //</editor-fold>
+    public static int NUMBER_OF_PERSON_TYPES=3;
+    public static int MENU_TYPE_FATHER = 1;
+    public static int MENU_TYPE_CHILDREN = 2;
     
-    // <editor-fold desc="EVENT TYPE" defaultstate="collapsed">
-    public static final String STRING_ENTRY="E";
-    public static final String STRING_EXIT="S";
-    //</editor-fold>
     
-    // <editor-fold desc="OBJECT TYPE" defaultstate="collapsed">
-    public static final String OBJECT_PERSON = "Persona";
-    //</editor-fold>
+    
+    public static String getMonthName(int monthNumber){
+        switch(monthNumber){
+            case 0:
+                return BundleUtils.getBundleProperty("January");
+            case 1:
+                return BundleUtils.getBundleProperty("February");
+            case 2:
+                return BundleUtils.getBundleProperty("March");
+            case 3:
+                return BundleUtils.getBundleProperty("April");
+            case 4:
+                return BundleUtils.getBundleProperty("May");
+            case 5:
+                return BundleUtils.getBundleProperty("June");
+            case 6:
+                return BundleUtils.getBundleProperty("July");
+            case 7:
+                return BundleUtils.getBundleProperty("August");
+            case 8:
+                return BundleUtils.getBundleProperty("September");
+            case 9:
+                return BundleUtils.getBundleProperty("October");
+            case 10:
+                return BundleUtils.getBundleProperty("November");
+            case 11:
+                return BundleUtils.getBundleProperty("December");
+        }
+        return "";//This should never happend
+        
+    }
+    
 }

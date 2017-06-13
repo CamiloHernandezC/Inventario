@@ -96,65 +96,6 @@
                                 </h:form>
                             </h:panelGrid>
 
-                            <p:confirmDialog id="blockedDialog" appendTo="@(body)" message="BLOQUEADO" header="BLOQUEADO" severity="error" showEffect="fade" hideEffect="fade" widgetVar="blockedDialog" closable="false">
-                                <h:form>
-                                    <p:commandButton value="#{bundle.Accept}" onclick="PF('blockedDialog').hide();" ajax="false"/>
-                                </h:form>
-                            </p:confirmDialog>
-                            <p:confirmDialog id="expressDialog" appendTo="@(body)" message="#{bundle.DontExistPersonMessage}" header="Atención" severity="error" showEffect="fade" hideEffect="fade" widgetVar="expressDialog" closable="false">
-                                <h:form>
-                                    <p:commandButton value="#{bundle.Accept}" onclick="PF('expressDialog').hide();" ajax="false"/>
-
-                                    <p:commandButton value="Ir a Registrar Persona" action="#{expressController.redirecToPersonFormEntry()}" ajax="false"/>
-                                </h:form>
-                            </p:confirmDialog>
-
-                            <p:confirmDialog id="sucursalDialog" appendTo="@(body)" message="Seleccione los siguientes datos para la entrada" header="Sucursal" severity="error" showEffect="fade" hideEffect="fade" widgetVar="sucursalDialog" closable="false">
-                                <h:form id="sucursalForm">
-                                    <h:panelGrid columns="1" cellpadding="5px">
-                                        <h:panelGrid columns="4" cellpadding="5">
-                                            <p:outputLabel for="sucursales" value="#{bundle.CreatePersonasCliLabel_idSucursal}" rendered="#{configFormController.mostrarSucursal}"/>
-                                            <p:selectOneMenu id="sucursales" value="#{personasSucursalController.selected.sucursales}" rendered="#{configFormController.mostrarSucursal}" required="#{configFormController.mostrarSucursal}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_idSucursal}" autoWidth="false" style=" width: 170px">
-                                                <f:selectItem itemLabel="Seleccionar"  noSelectionOption="true" itemValue="#{null}"/>
-                                                <f:selectItems  value="#{sucursalesController.items}" var="sucursales" itemLabel="#{sucursales.nombre}" itemValue="#{sucursales}"/>
-                                            </p:selectOneMenu>
-                                            <p:outputLabel for="areaEmpresa" value="#{bundle.CreatePersonasCliLabel_area}" rendered="true"/>
-                                            <p:selectOneMenu id="areaEmpresa" value="#{personasSucursalController.selected.area}" rendered="true" required="true" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_area}" filter="true" filterMatchMode="contains"  autoWidth="false" style=" width: 170px">
-                                                <f:selectItem itemLabel="Seleccionar"  noSelectionOption="true" itemValue="#{null}"/>
-                                                <f:selectItems value="#{areasEmpresaController.items}" var="areas" itemLabel="#{areas.descripcion}" itemValue="#{areas}"/>
-                                            </p:selectOneMenu>
-
-                                            <p:outputLabel for="vigenciaEPS" value="#{bundle.CreatePersonasCliLabel_fechavigenciaEPS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}"/>
-                                            <p:calendar id="vigenciaEPS" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}" required="#{configFormController.mostrarFecha_vigencia_EPS}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fechaEPS}" style=" width: 200px" yearRange="c-100:c+0" navigator="true"  mindate="#{generalViewControl.actualDate}"/>
-                                            <p:outputLabel for="vigenciaARL" value="#{bundle.CreatePersonasCliLabel_fechavigenciaARL}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}"/>
-                                            <p:calendar id="vigenciaARL" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}" required="#{configFormController.mostrarFecha_vigencia_ARL}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fecha_arl}" yearRange="c-100:c+0" navigator="true"  style="width: 200px"  mindate="#{generalViewControl.actualDate}"/>
-
-                                        </h:panelGrid>
-                                        <h:panelGrid columns="2" cellpadding="5px">
-                                            <p:commandButton value="Aceptar" action="#{manualController.save(true)}" ajax="true"/>
-                                            <p:commandButton value="#{bundle.Cancel}" update="sucursalForm" onclick="PF('sucursalDialog').hide();" ajax="false" immediate="true"/>
-                                        </h:panelGrid>
-                                    </h:panelGrid>
-
-
-                                </h:form>
-                            </p:confirmDialog>
-
-
-                            <p:confirmDialog id="fechasDialog" appendTo="@(body)" message="Seleccione los siguientes datos para la entrada" header="Sucursal" severity="error" showEffect="fade" hideEffect="fade" widgetVar="fechasDialog" closable="false">
-                                <h:form id="fechasForm">
-                                    <h:panelGrid columns="4" cellpadding="5">
-
-                                        <p:outputLabel for="vigenciaEPS" value="#{bundle.CreatePersonasCliLabel_fechavigenciaEPS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}"/>
-                                        <p:calendar id="vigenciaEPS" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_EPS}" required="#{configFormController.mostrarFecha_vigencia_EPS}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fechaEPS}" style=" width: 200px" yearRange="c-100:c+0" navigator="true"  mindate="#{generalViewControl.actualDate}"/>
-                                        <p:outputLabel for="vigenciaARL" value="#{bundle.CreatePersonasCliLabel_fechavigenciaARL}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}"/>
-                                        <p:calendar id="vigenciaARL" value="#{manualController.selected.fechaVigenciaSS}" rendered="#{configFormController.mostrarFecha_vigencia_ARL}" required="#{configFormController.mostrarFecha_vigencia_ARL}" requiredMessage="#{bundle.CreatePersonasCliRequiredMessage_fecha_arl}" yearRange="c-100:c+0" navigator="true"  style="width: 200px"  mindate="#{generalViewControl.actualDate}"/>
-
-                                    </h:panelGrid>
-                                    <p:commandButton value="Aceptar" action="#{manualController.save(true)}" ajax="true"/>
-                                </h:form>
-                            </p:confirmDialog>
-
                             <p:dialog header="Dialogo de Ayuda" appendTo="@(body)" widgetVar="dlgHelpTheme" modal="true" closable="true" minHeight="40">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <h:panelGrid columns="1" cellpadding="10">

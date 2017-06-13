@@ -5,9 +5,8 @@
  */
 package ViewControllers;
 
-import Controllers.util.JsfUtil;
+import Converters.util.JsfUtil;
 import MaterialController.CardexController;
-import Utils.HelpUtils;
 import Utils.Navigation;
 import java.io.Serializable;
 import java.util.Date;
@@ -42,11 +41,11 @@ public class GeneralViewControl implements Serializable{
     //<editor-fold desc="NAVEGACION INDEX" defaultstate="collapsed">
     public String irConfiguracion(){
         return Navigation.PAGE_CONFIGURATION;
-    }
+}
     
     public void irContactanos(){
-        HelpUtils helpUtils = JsfUtil.findBean("helpUtils");
-        helpUtils.limpiar();
+        //HelpUtils helpUtils = JsfUtil.findBean("helpUtils");
+        //helpUtils.limpiar();
         JsfUtil.showModal("diagContact");
     }
     

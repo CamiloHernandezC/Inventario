@@ -1,10 +1,10 @@
 package GeneralControl;
 
-import Controllers.UsuariosController;
-import Controllers.util.JsfUtil;
+import Converters.util.JsfUtil;
+import Converters.UsuariosController;
 import Entities.Usuarios;
 import Querys.Querys;
-import Themes.TemasController;
+import Themes.ThemeController;
 import Utils.BundleUtils;
 import Utils.Constants;
 import Utils.Email;
@@ -42,7 +42,6 @@ public class LoginControl implements Serializable {
         this.selected = selected;
     }
 
-    //TODO TENER BOTON DE ENVIAR EMAIL PARA RECORDAR LA CONTRASEÑA
     public void login() {
 
         //TODO CODIFICACION DE LA CLAVE
@@ -71,19 +70,18 @@ public class LoginControl implements Serializable {
         String IDSesion = String.valueOf(Math.random());
         selected.setIDSesion(IDSesion);
         selected.setSesion(true);
-        TemasController temasController = JsfUtil.findBean("temasController");
-        temasController.setSelectedLogin(selected.getTema());
+        ThemeController themeController = JsfUtil.findBean("themeController");
+        themeController.setSelectedLogin(selected.getTema());
         usuariosController.setSelected(selected);
         usuariosController.update();
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         httpSession.setAttribute(Constants.SESSION_USER, selected);
-        //CAMBIAR
         JsfUtil.redirectTo(Navigation.PAGE_INDEX);
         selected = null;
     }
     
     public void validSession(){
-        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);//Se deja que cree una sesion para que esta no sea nula
+        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         Usuarios httpUser = (Usuarios) httpSession.getAttribute(Constants.SESSION_USER);
         if(httpUser==null){
             JsfUtil.redirectTo("");//Redirect to login
@@ -95,25 +93,6 @@ public class LoginControl implements Serializable {
             return;
         }
         JsfUtil.redirectTo("");//Redirect to login
-    }
-    
-    public String logout() {
-        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        if(httpSession== null){
-            return Navigation.PAGE_LOGIN;//Redirect to login
-        }
-        Usuarios httpUser = (Usuarios) httpSession.getAttribute(Constants.SESSION_USER);
-        if(httpUser== null){
-            return Navigation.PAGE_LOGIN;//Redirect to login
-        }
-        usuariosController.getSelected().setSesion(false);
-        /*Usuarios usuario = usuariosController.getSelected();
-        usuario.setSesion(false);
-        usuariosController.setSelected(usuario);*/
-        usuariosController.update();
-        ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate();
-        
-        return Navigation.PAGE_LOGIN;//Redirect to login
     }
     
     public String recoverPassword(){

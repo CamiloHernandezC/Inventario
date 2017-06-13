@@ -12,14 +12,14 @@
                 <h:panelGrid columns="4" cellpadding="5px">
                     
                     <h:outputLabel value="Numero de Reminsion" />
-                    <p:inputText autocomplete="false" disabled="true" required="true"/>
+                    <p:inputText autocomplete="false" disabled="true" required="true" requiredMessage="REMISION"/>
                     
                     <p:panelGrid/>
                     <p:panelGrid/>
                     
                     <h:outputLabel for="express" value="Codigo de Barras*" />
                     <p:inputText  autocomplete="false" value="#{materialesController.selected.idMaterial}" id="express">
-                        <p:ajax event="keyup" listener="#{cardexController.agregarTablaMaterial()}" update=":formularioIngresoMateriales:tablaCardex :formularioIngresoMateriales:express"/>
+                        <p:ajax event="blur" listener="#{cardexController.agregarTablaMaterial()}"/>
                     </p:inputText>
                     
                     <h:outputLabel value="Numero de Reminsion Llegada" />

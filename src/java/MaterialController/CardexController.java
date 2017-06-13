@@ -1,9 +1,10 @@
 package MaterialController;
 
-import Controllers.util.JsfUtil;
+import Converters.util.JsfUtil;
 import Entities.Almacen;
 import Entities.Cardex;
 import Entities.Materiales;
+import Entities.MaterialesSucursal;
 import Entities.MaterialesSucursalPK;
 import Entities.Remisiones;
 import Facade.CardexFacade;
@@ -15,7 +16,7 @@ import javax.enterprise.context.SessionScoped;
 
 @Named("cardexController")
 @SessionScoped
-public class CardexController extends Controllers.CardexController{
+public class CardexController extends Converters.CardexController{
     
     private int code;
 
@@ -29,38 +30,39 @@ public class CardexController extends Controllers.CardexController{
 
     public void agregarTablaMaterial(){
         MaterialesController materialesController = JsfUtil.findBean("materialesController");
-        if(String.valueOf(materialesController.getSelected().getIdMaterial()).length() != 1){
+        if(materialesController.getSelected().getIdMaterial()==null){
             return;
-        }
+        }        
         Materiales material = materialesController.buscarMaterial();
         if(material== null){
             JsfUtil.addErrorMessage("No se encontro material");
             limpiarMaterial(materialesController);
+            JsfUtil.redirectTo(Navigation.PAGE_MATERIAL_ENTRY);
             return;
         }
         selected = new Cardex();
         if(items.isEmpty()){
             prepararCardex(material);
             items.add(selected);
-            limpiarMaterial(materialesController);
+            JsfUtil.redirectTo(Navigation.PAGE_MATERIAL_ENTRY);
             return;
         }
         prepararCardex(material);
         buscarIdMaterialItems();
         limpiarMaterial(materialesController);
+        JsfUtil.redirectTo(Navigation.PAGE_MATERIAL_ENTRY);
     }
 
     private void prepararCardex(Materiales material) {
         selected.setCantida(1);
-        selected.getMaterialesSucursal().setMateriales(material);
-        selected.setAlmacen(new Almacen(1));
-        selected.getMaterialesSucursal().setMaterialesSucursalPK(new MaterialesSucursalPK(material.getIdMaterial(), 1));
-        selected.setRemision(new Remisiones(1));
+        selected.setMaterialesSucursal(new MaterialesSucursal(material.getIdMaterial(), 1));//TODO assign real branch office here
+        selected.setAlmacen(new Almacen(1));//TODO assign real value here
+        selected.setRemision(new Remisiones(1));//TODO assign real value here
     }
 
     private void buscarIdMaterialItems() {
         for(Cardex cardex: items){
-            if(Objects.equals(cardex.getMaterialesSucursal().getMateriales().getIdMaterial(), selected.getMaterialesSucursal().getMateriales().getIdMaterial())){
+            if(Objects.equals(cardex.getMaterialesSucursal().getMateriales().getIdMaterial(), selected.getMaterialesSucursal().getMaterialesSucursalPK().getIdMaterial())){
                 cardex.setCantida(cardex.getCantida()+1);
                 cardex.setCantidadActual(cardex.getCantida());
                 return;

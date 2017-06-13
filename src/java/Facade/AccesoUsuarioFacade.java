@@ -5,6 +5,7 @@
  */
 package Facade;
 
+import Facade.AbstractFacade;
 import Entities.AccesoUsuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -12,12 +13,12 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author a.morales
+ * @author Kmilo
  */
 @Stateless
 public class AccesoUsuarioFacade extends AbstractFacade<AccesoUsuario> {
 
-    @PersistenceContext(unitName = "PorteriaV3PU")
+    @PersistenceContext(unitName = "AlmacenV3PU")
     private EntityManager em;
 
     @Override

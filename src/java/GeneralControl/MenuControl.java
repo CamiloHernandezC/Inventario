@@ -5,16 +5,23 @@
  */
 package GeneralControl;
 
-import Utils.Navigation;
+import Converters.util.JsfUtil;
+import Entities.MenuCliente;
+import Entities.Usuarios;
+import Querys.Querys;
+import Utils.BundleUtils;
+import Utils.Constants;
 import java.io.Serializable;
-import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-
 import javax.inject.Named;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuElement;
 import org.primefaces.model.menu.MenuModel;
 
 /**
@@ -25,6 +32,8 @@ import org.primefaces.model.menu.MenuModel;
 @SessionScoped
 public class MenuControl implements Serializable{
 
+    @EJB
+    private Facade.MenuClienteFacade ejbFacade;
     
     private MenuModel menu;
     /**
@@ -35,52 +44,33 @@ public class MenuControl implements Serializable{
     
     @PostConstruct//This method is called just one time by JSF
     public void init() {
-        
-        //<editor-fold desc="Menu" defaultstate="collapsed">
+        //<editor-fold desc="Menu construction" defaultstate="collapsed">
         menu = new DefaultMenuModel();
-         
-        ResourceBundle rb = ResourceBundle.getBundle("Utils/Bundle");
+        HashMap menuMap = new HashMap();
         
-        //ENTRY SUBMENU
-        DefaultSubMenu firstSubmenu = new DefaultSubMenu(rb.getString("Entry"));
+        Usuarios user = JsfUtil.getSessionUser();
         
-        DefaultMenuItem item = new DefaultMenuItem(rb.getString("Complete_Entry"));
-        item.setCommand("#{generalController.clean('"+Navigation.PAGE_COMPLETE_ENTRY+"')}");
-        firstSubmenu.addElement(item);
-        
-        item = new DefaultMenuItem(rb.getString("Express_Entry"));
-        item.setCommand("#{generalController.clean('"+Navigation.PAGE_EXPRESS_ENTRY+"')}");
-        firstSubmenu.addElement(item);
-         
-        menu.addElement(firstSubmenu);
-         
-        //EXIT SUBMENU
-        DefaultSubMenu secondSubmenu = new DefaultSubMenu(rb.getString("Exit"));
- 
-        item = new DefaultMenuItem(rb.getString("Complete_Exit"));
-        item.setCommand("#{generalController.clean('"+Navigation.PAGE_COMPLETE_EXIT+"')}");
-        secondSubmenu.addElement(item);
-        
-        item = new DefaultMenuItem(rb.getString("Express_Exit"));
-        item.setCommand("#{generalController.clean('"+Navigation.PAGE_EXPRESS_EXIT+"')}");
-        secondSubmenu.addElement(item);
- 
-        menu.addElement(secondSubmenu);
-        
-        //CONFIG SUBMENU
-        DefaultSubMenu thirdSubmenu = new DefaultSubMenu(rb.getString("Configuration"));
-
-        item = new DefaultMenuItem(rb.getString("Configuration"));
-        item.setCommand("#{generalController.clean('"+Navigation.PAGE_CONFIGURATION+"')}");
-
-        thirdSubmenu.addElement(item);
-
-        menu.addElement(thirdSubmenu);
+        String menuQuery = Querys.MENU_CLIENTE_JOIN_PRIVILEGIOS+" WHERE "+Querys.MENU_CLIENTE_NIVEL_MORE_EQUAL+user.getPrivilegios()+"'"+Querys.MENU_CLIENTE_HAS_PRIVILEGE;//TODO ADD STATUS FILTER
+        List<MenuCliente> menuItems = (List<MenuCliente>) ejbFacade.findByQueryArray(menuQuery).result;
+        for(MenuCliente item: menuItems){
+            if(item.getTipo()==Constants.MENU_TYPE_CHILDREN){
+                DefaultMenuItem menuItem = new DefaultMenuItem(BundleUtils.getBundleProperty(item.getNombre()));
+                menuItem.setUrl(item.getUrl());
+                DefaultSubMenu subMenu = (DefaultSubMenu) menuMap.get(item.getPadre());
+                if(subMenu==null){//If father isn't loaded yet
+                    MenuCliente fatherMenu = ejbFacade.find(item.getPadre());
+                    subMenu = new DefaultSubMenu(BundleUtils.getBundleProperty(fatherMenu.getNombre()));
+                }
+                subMenu.addElement(menuItem);
+                menuMap.put(item.getPadre(), subMenu);
+            }
+        }
+        menuMap.forEach((k,v)->menu.addElement((MenuElement) v));
         //</editor-fold>
     }
  
     public MenuModel getMenu() {
         return menu;
     }   
-    
+
 }

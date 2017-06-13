@@ -7,7 +7,7 @@ import javax.enterprise.context.SessionScoped;
 
 @Named("materialesController")
 @SessionScoped
-public class MaterialesController extends Controllers.MaterialesController{
+public class MaterialesController extends Converters.MaterialesController{
 
     public MaterialesController() {
     }

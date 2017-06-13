@@ -7,7 +7,9 @@ package Facade;
 
 import Utils.Constants;
 import Utils.Result;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -88,19 +90,6 @@ public abstract class AbstractFacade<T> {
         
         EntityManager em = getEntityManager();
         Query query = em.createQuery(squery);
-        List<T> list;
-        list = (List<T>) query.getResultList();
-        if(list.isEmpty()){
-            return new Result(list, Constants.NO_RESULT_EXCEPTION);
-        }
-        return new Result(list, Constants.OK);
-    }
-    
-    public Result findByQueryArray(String squery, int top) {
-        
-        EntityManager em = getEntityManager();
-        Query query = em.createQuery(squery);
-        query.setMaxResults(top);
         List<T> list;
         list = (List<T>) query.getResultList();
         if(list.isEmpty()){
